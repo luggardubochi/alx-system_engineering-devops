@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
-# displays numbers from 1 to 100.
-COUNTER=1
-while [ $COUNTER -lt 101 ]
-do
-    if [ $((COUNTER % 15)) = 0 ]
+# This is a fizzbuzz file
+
+for i in {1..100}; do
+    if [ $((i % 3 )) -eq 0 ] && [ $((i % 5)) -ne 0 ]
     then
-        echo "FizzBuzz"
-    elif [ $((COUNTER % 3)) = 0 ]
+	echo "Fizz"
+    elif [ $((i % 5)) -eq 0 ] && [ $((i % 3)) -ne 0 ]
     then
-        echo "Fizz"
-    elif [ $((COUNTER % 5)) = 0 ]
+	echo "Buzz"
+    elif [ $((i % 5)) -eq 0 ] && [ $((i % 3 )) -eq 0 ]
     then
-        echo "Buzz"
+	echo "FizzBuzz"
     else
-        echo "$COUNTER"
+	echo "$i"
     fi
-    let COUNTER+=1
 done

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# displays the content of the current working directory.
-for i in *
+# This Script prints filenames in the 'pwd' begins from '_'
+
+for fname in *;
 do
-    echo "$i" | cut -d'-' -f2
+    echo "$fname" | cut -d'-' -f 2
 done
