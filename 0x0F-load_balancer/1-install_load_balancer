@@ -5,12 +5,12 @@ apt-get -y install haproxy
 # edit config file
 server_config=\
 "
-frontend luggard-alx-frontend
+frontend luggard.tech-frontend
         bind *:80
         mode http
         default_backend luggard-alx-backend
 
-backend luggard-alx-backend
+backend luggard.tech-backend
         balance roundrobin
 	server 17192-web-01 35.172.224.158:80 check
         server 17192-web-02 3.230.169.204:80 check
