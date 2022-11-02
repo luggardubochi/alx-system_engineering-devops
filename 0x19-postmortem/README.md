@@ -1,4 +1,5 @@
 # 0x19-postmortem
+![BUG](https://i.pinimg.com/564x/74/68/56/74685691970bbb2e0c1b2c7176fb5d05.jpg)
 # Issue summary
 on the 17/10/2022,
 Alvin-glosory our major e-commerce brand in Lito lab went down for 50 minutes. The site went down after unmonitored sudden traffic spike caused by a marketing campaign.The outage was caused by configuration error in cluster resource management which prevented more service instances from starting even though hardware resources were available.
@@ -24,6 +25,8 @@ it did occurred to us after the discovery that due to a misconfiguration, some s
 The direct cause was a special offer in which 50 Samsung galaxy s20 ultra phones whose regular price is around 780,000 Naira ($1000), were offered a 50% discount at a price of 390,000 Naira (500$). This attracted more traffic than anticipated and at the same time triggered a configuration error in the way services are scaled out. This caused the site to go down despite there being plenty of CPUs, RAM, and Network capacity available in our data centers.
 * To solve the problem we made it possible to finish the transaction to all the buyers that purchased at the discount price, but those whose transactions were aborted as the system went down, could not be carried out again.
 * We prepare internal postmortems after any serious issue in order to analyze the causes and learn from our mistakes. This was carried out by Luggard Ubochi the team lead that took part in dealing with the outage. What goes on inside a service which experiences traffic higher than it can handle with available resources? Response times increase, the autoscaler tries to scale up the service, instances whose health endpoint can’t respond within a specified timeout, are automatically shut down. During the outage, autoscaler did not respond quickly enough to rising traffic and we had to scale up manually. There were also some bad interactions between the autoscaler scaling services up and the cluster watchdog killing off unresponsive instances.
+
+![code confesses](https://pics.me.me/idontuse-debuggers-istare-down-until-the-code-confesses-memes-thats-10674287.png)
 # Corrective and preventative measures
 * The observation that new Opbox instances had issues while starting under high load. Newly started instances very quickly reached “unresponsive” status and were automatically killed. We will try out several ideas which should make the service start up faster even if it gets hit with lots of requests right away.
 * Finally, by introducing smart caches, we should be able to eliminate the need for many requests altogether. Due to personalisation, item pages are normally not cached and neither is the data returned by backend services used for rendering those pages. However, we plan to introduce a mechanism which will be able to tell backend services to generate simplified, cacheable responses under special conditions. This will allow us to decrease load under heavy traffic.
